@@ -69,6 +69,19 @@ const Home = () => {
     fetchFiles();
   }, []);
 
+  const handleModalClick = (event: React.MouseEvent) => {
+    const { clientX, currentTarget } = event;
+    const { offsetWidth } = currentTarget as HTMLElement;
+    const currentIndex = files.findIndex(file => file.Key === selectedImage.Key);
+    if (clientX < offsetWidth / 2) {
+      const prevIndex = Math.max(currentIndex - 1, 0);
+      setSelectedImage(files[prevIndex]);
+    } else {
+      const nextIndex = Math.min(currentIndex + 1, files.length - 1);
+      setSelectedImage(files[nextIndex]);
+    }
+  };
+
   return (
     <>
       {!modalIsOpen && (
@@ -120,7 +133,7 @@ const Home = () => {
           shouldCloseOnOverlayClick={true}
         >
           {selectedImage && (
-            <Box position="relative" width="100%" height="100%" bg="black" onClick={closeModal}>
+            <Box position="relative" width="100%" height="100%" bg="black" onClick={handleModalClick}>
               <Image
                 src={imageUrl(selectedImage)}
                 alt="Selected Image"
