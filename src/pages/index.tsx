@@ -1,8 +1,7 @@
 import { useEffect, useState } from 'react';
-import { Box, Heading, List, ListItem, Spinner, Text, Button, Flex, SimpleGrid } from '@chakra-ui/react';
+import { Box, Heading, Spinner, Button, Flex, SimpleGrid } from '@chakra-ui/react';
 import Image from 'next/image';
 import Modal from 'react-modal';
-import { image } from 'framer-motion/client';
 
 const customStyles = {
   content: {
@@ -71,7 +70,7 @@ const Home = () => {
     <>
       {!modalIsOpen && (
         <Box as="header" position="fixed" top="0" left="0" width="100%" color="white" bg="gray.800" zIndex="1000" p={1} boxShadow="md">
-          <Heading mb={0}>S3 Bucket Files</Heading>
+          <Heading mb={0}>S3 Bucket Image Viewer</Heading>
         </Box>
       )}
       <Box p={5} pt={modalIsOpen ? "0" : "64px"}>
