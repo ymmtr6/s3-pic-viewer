@@ -2,6 +2,9 @@ import { useEffect, useState } from 'react';
 import { Box, Heading, Spinner, Button, Flex, SimpleGrid } from '@chakra-ui/react';
 import Image from 'next/image';
 import Modal from 'react-modal';
+import { FaArrowLeft, FaArrowRight } from 'react-icons/fa';
+
+Modal.setAppElement('#__next');
 
 const customStyles = {
   content: {
@@ -86,7 +89,8 @@ const Home = () => {
                     alt={file.Key}
                     width={200}
                     height={200}
-                    objectFit="contain"
+                    style={{ objectFit: 'contain' }}
+                    priority={true}
                   />
                 )}
               </Box>
@@ -98,11 +102,15 @@ const Home = () => {
           bottom="10px"
           left="50%"
           transform="translateX(-50%)"
-          justifyContent="space-between"
+          justifyContent={currentPage === 1 ? 'flex-end' : 'space-between'}
           width="80%"
         >
-          <Button onClick={prevPage} disabled={currentPage === 1}>Previous</Button>
-          <Button onClick={nextPage} disabled={indexOfLastItem >= files.length}>Next</Button>
+          <Button onClick={prevPage} disabled={currentPage === 1} display={currentPage === 1 ? 'none' : 'inline-flex'}>
+            <FaArrowLeft />
+          </Button>
+          <Button onClick={nextPage} disabled={indexOfLastItem >= files.length} display={indexOfLastItem >= files.length ? 'none' : 'inline-flex'}>
+            <FaArrowRight />
+          </Button>
         </Flex>
         <Modal
           isOpen={modalIsOpen}
@@ -116,8 +124,10 @@ const Home = () => {
               <Image
                 src={imageUrl(selectedImage)}
                 alt="Selected Image"
-                layout="fill"
-                objectFit="contain"
+                fill
+                style={{ objectFit: 'contain' }}
+                priority={true}
+                quality={100}
               />
             </Box>
           )}
