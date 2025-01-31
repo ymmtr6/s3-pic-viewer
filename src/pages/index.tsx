@@ -1,5 +1,5 @@
 import { useEffect, useState } from 'react';
-import { Box, Heading, Spinner, Button, Flex, SimpleGrid } from '@chakra-ui/react';
+import { Box, Heading, Spinner, Button, Flex, SimpleGrid, createListCollection } from '@chakra-ui/react';
 import Image from 'next/image';
 import Modal from 'react-modal';
 import { FaArrowLeft, FaArrowRight } from 'react-icons/fa';
@@ -27,16 +27,20 @@ const Home = () => {
   const [files, setFiles] = useState<any[]>([]);
   const [loading, setLoading] = useState(true);
   const [currentPage, setCurrentPage] = useState(1);
-  const itemsPerPage = 16;
+  const [itemsPerPage, setItemsPerPage] = useState(32);
   const [modalIsOpen, setModalIsOpen] = useState(false);
   const [selectedImage, setSelectedImage] = useState<any>(null);
 
   const indexOfLastItem = currentPage * itemsPerPage;
   const indexOfFirstItem = indexOfLastItem - itemsPerPage;
+  const itemsPerPageOptions = createListCollection({
+    items: [
+      { value: 16 },
+      { value: 32 },
+      { value: 64 },
+      { value: 128 }
+    ]}); // 選択肢を定義
   const currentFiles = files.slice(indexOfFirstItem, indexOfLastItem);
-
-
-
 
   const nextPage = () => setCurrentPage((prev) => prev + 1);
   const prevPage = () => setCurrentPage((prev) => Math.max(prev - 1, 1));
@@ -109,7 +113,22 @@ const Home = () => {
       </Head>
       {!modalIsOpen && (
         <Box as="header" position="fixed" top="0" left="0" width="100%" color="white" bg="gray.800" zIndex="1000" p={1} boxShadow="md">
-          <Heading mb={0} pl={2}>S3 Bucket Image Viewer</Heading>
+          <Flex justifyContent="space-between" alignItems="center" width="100%">
+            <Heading mb={0} pl={2}>S3 Bucket Image Viewer</Heading>
+            <select
+              value={itemsPerPage} // 変更点
+              onChange={(e) => {
+                setItemsPerPage(Number(e.target.value)); // 変更点
+              }}
+              style={{ backgroundColor: 'gray.800', color: 'white' }} // 背景色と文字色を設定
+            >
+              {itemsPerPageOptions.items.map((item) => (
+                <option key={item.value} value={item.value}>
+                  {item.value}
+                </option>
+              ))}
+            </select>
+          </Flex>
         </Box>
       )}
       <Box p={5} pt={modalIsOpen ? "0" : "64px"}>
